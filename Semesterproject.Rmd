@@ -6,6 +6,20 @@ output: html_document
 
 ---
 
+Proposal:
+
+Formulate at least two research questions for your project– Typical types of research questions for a methodological project start with 
+    “How can this and that be conceptualized/modelled/implemented…?” or '
+    “Can this and that pattern be efficiently and effectively detected in this and that data…?”
+    
+Develop a research plan for investigating the above research questions.– 
+    What data do you need?– 
+    Where do you get this data from?– 
+    What tools do you need?– 
+    Will you use extensions of tools you got to know in E1 – E5?– 
+    Are there other R tools or even tools beyond R that you will be using in your project? 
+
+Summarize your research plan in a semester project proposal.– Use the template given via github– Submit your proposal until 15.05.2021
 
 <!-- You can add  your R Code with Code chunks-->
 
