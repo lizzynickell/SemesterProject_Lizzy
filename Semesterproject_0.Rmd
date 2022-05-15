@@ -1,0 +1,145 @@
+---
+title: Wild boar are from mars
+subtitle: Do male boars move more than females?
+author: He Yelu and Lizzy Nickell
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+Proposal:
+
+Formulate at least two research questions for your project-- Typical types of research questions for a methodological project start with "How can this and that be conceptualized/modelled/implemented...?" or ' "Can this and that pattern be efficiently and effectively detected in this and that data...?"
+
+Possible Questions:
+
+-   Is there a difference in how much males move vs. females?
+
+Develop a research plan for investigating the above research questions.--
+
+-   What data do you need? Movement data from multiple individuals, equal number of males and females
+
+-   Where do you get this data from? From the provided boar data set
+
+-   What tools do you need? R, arcGIS (maybe)
+
+-   Will you use extensions of tools you got to know in E1 -- E5?--
+
+-   Are there other R tools or even tools beyond R that you will be using in your project?
+
+
+<!-- You can add  your R Code with Code chunks-->
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+
+# You can set chunk options individually per code chunk, as was done with this
+# code chunk.
+
+# echo = FALSE           hides the code from the generated output
+# warning = FALSE        hides warnings from the generated output
+# message = FALSE        hides messages from the generated output
+
+# To set the setting for all code chunks, use the following code:
+
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+
+```
+
+## Abstract
+
+Wild boars show a distinct physical sexual dimorphism, with males being much larger than the females. Can this difference be seen in other aspects of wild boars? We analyzed the movement patterns of XX boars, X male and X females to compare the amount of movement in the sexes. We predicted that females move less than males, as they must care for the young, and are not responsible for maintaining territory.
+
+## Introduction
+
+The wildboar (*Sus scrofa*) is native to most of Eurasia, and are considered a pest in most countries. Because of this, numerous tracking programs have been put in place to monitor their activities.
+
+```{r}
+library("devtools")
+devtools::install_github("ComputationalMovementAnalysis/ComputationalMovementAnalysisData")
+library(ComputationalMovementAnalysisData)
+library(ggplot2)
+library(tidyverse)
+head(wildschwein_BE)
+
+##   TierID TierName CollarID         DatetimeUTC       E       N
+## 1      1     Ueli    12272 2014-05-28 21:01:14 2570390 1204820
+## 2      1     Ueli    12272 2014-05-28 21:15:18 2570389 1204826
+## 3      1     Ueli    12272 2014-05-28 21:30:13 2570391 1204821
+## 4      1     Ueli    12272 2014-05-28 21:45:11 2570388 1204826
+## 5      1     Ueli    12272 2014-05-28 22:00:33 2570388 1204819
+## 6      1     Ueli    12272 2014-05-28 22:15:16 2570384 1204828
+# Include tables with the function "kable"
+
+knitr::kable(head(wildschwein_BE))
+```
+
+```{r}
+# include plots automatically
+ggplot(schreck_locations, aes(lat, lon)) +
+  geom_point(aes(color = id)) 
+
+ggplot(wildschwein_BE, aes(E,N))+
+  geom_point(aes(color=TierID))
+```
+
+## Material and Methods
+
+<!-- the following is just a placeholder text, remove it!-->
+### 1 Study area
+
+Bern / Fanel
+
+
+### 2 Data
+
+2.1 Wild boar data set description
+  Over the past 20 years, wild boar populations have increased significantly in large parts of Europe. With the number of wild boars, the damage to agriculture also increases. Previous measures to reduce damage are very complex and associated with high costs. A new approach uses native alert and alert runs to keep wild boar away from valuable crops. The effectiveness and practicability of this deterrent system are to be tested in a scientific study.
+
+2.1 Weather data
+  Weather data is obtained from xx weather station in Bern/Fanel, with daily measurements of precipitation, temperature, wind speed and snow depth. (need to be updated)
+
+
+### 3 Methods
+
+3.1 Data pre-processing
+
+-   Data cleaning.
+
+-   Data combination to assign sexes to boar id.
+
+-   Assigning scores to movement.
+
+3.2 Data analysis
+
+-   Comparing scores of males and females.
+
+-   Time series analysis of movement pattern.
+
+-   Circannual movement pattern analysis among genders.
+
+-   Circadian movement pattern analysis among genders.
+
+-   Modelling between environmental factors and movement pattern.
+
+3.3 Visualization
+
+(R visualization tools)
+
+## Expected Results
+-   Pre-processed data table.
+-   Multi-line graphs.
+-   Maps of movement pattern (hot spot & clusters of male and female boars).
+-   Other diagrams...
+
+## Discussion
+-   Validating the hypothesis that there is obvious gender differences on movement pattern of wild boar.
+-   Discussing the impact of environmental factors on movement of wild boar.
+-   Impact of our project on further research.
+-   Possible applications of our result.
+
+## References
+
+[1] Jana Zschille, Norman Stier, Mechthild Roth. Gender differences in activity patterns of American mink in Germany. European Journal of Wildlife Research, Springer Verlag, 2009, 56(2), pp.187-194. 10.1007/s10344-009-0303-2.
+
+[2] https://www.zhaw.ch/de/forschung/forschungsdatenbank/projektdetail/projektid/842/
