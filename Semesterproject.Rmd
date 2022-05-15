@@ -1,25 +1,42 @@
 ---
-title: The title of your Semesterproject
-subtitle: A subtle subtitle
-author: Firstname1 Lastname1 and Firstname2 Lastname2
+title: Wild boar are from mars
+subtitle: Do male boars move more than females?
+author: He Yelu and Lizzy Nickell
 output: html_document
-
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 Proposal:
 
-Formulate at least two research questions for your project– Typical types of research questions for a methodological project start with 
-    “How can this and that be conceptualized/modelled/implemented…?” or '
-    “Can this and that pattern be efficiently and effectively detected in this and that data…?”
-    
-Develop a research plan for investigating the above research questions.– 
-    What data do you need?– 
-    Where do you get this data from?– 
-    What tools do you need?– 
-    Will you use extensions of tools you got to know in E1 – E5?– 
-    Are there other R tools or even tools beyond R that you will be using in your project? 
+Formulate at least two research questions for your project-- Typical
+types of research questions for a methodological project start with "How
+can this and that be conceptualized/modelled/implemented...?" or ' "Can
+this and that pattern be efficiently and effectively detected in this
+and that data...?"
 
-Summarize your research plan in a semester project proposal.– Use the template given via github– Submit your proposal until 15.05.2021
+Possible Questions:
+
+-   Is there a difference in how much males move vs. females?
+
+Develop a research plan for investigating the above research
+questions.--
+
+-   What data do you need? Movement data from multiple individuals,
+    equal number of males and females
+
+-   Where do you get this data from? From the provided boar data set
+
+-   What tools do you need? R, arcGIS (maybe)
+
+-   Will you use extensions of tools you got to know in E1 -- E5?--
+
+-   Are there other R tools or even tools beyond R that you will be
+    using in your project?
+
+Summarize your research plan in a semester project proposal.-- Use the
+template given via github-- Submit your proposal until 15.05.2021
 
 <!-- You can add  your R Code with Code chunks-->
 
@@ -38,58 +55,78 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 
 ```
 
-
 ## Abstract
 
-<!-- the following is just a placeholder text, remove it!-->
-Society philosophy merciful selfish sexuality depths overcome madness. Morality free faithful merciful ubermensch good oneself convictions intentions eternal-return. Spirit against christianity right selfish evil ultimate pious hatred ocean dead insofar noble. Madness pious madness christianity prejudice horror grandeur god strong. Ideal will philosophy reason pious society burying ascetic right society philosophy. Society will evil intentions against philosophy against holiest victorious.
-
-
-The is a new line
-
+Wild boars show a distinct physical sexual dimorphism, with males being
+much larger than the females. Can this difference be seen in other
+aspects of wild boars? We analyzed the movement patterns of XX boars, X
+male and X females to compare the amount of movement in the sexes. We
+predicted that females move less than males, as they must care for the
+young, and are not responsible for maintaining territory.
 
 ## Introduction
 
-<!-- the following is just a placeholder text, remove it!-->
-Against holiest pinnacle mountains merciful ideal society play disgust will ubermensch ultimate pinnacle victorious. Snare value law gains battle pious intentions revaluation strong. Insofar snare faith ideal oneself.
+The wildboar (*Sus scrofa*) is native to most of Eurasia, and are
+considered a pest in most countries. Because of this, numerous tracking
+programs have been put in place to monitor their activities.
 
 ```{r}
+library("devtools")
+devtools::install_github("ComputationalMovementAnalysis/ComputationalMovementAnalysisData")
 library(ComputationalMovementAnalysisData)
 library(ggplot2)
+library(tidyverse)
+head(wildschwein_BE)
 
+##   TierID TierName CollarID         DatetimeUTC       E       N
+## 1      1     Ueli    12272 2014-05-28 21:01:14 2570390 1204820
+## 2      1     Ueli    12272 2014-05-28 21:15:18 2570389 1204826
+## 3      1     Ueli    12272 2014-05-28 21:30:13 2570391 1204821
+## 4      1     Ueli    12272 2014-05-28 21:45:11 2570388 1204826
+## 5      1     Ueli    12272 2014-05-28 22:00:33 2570388 1204819
+## 6      1     Ueli    12272 2014-05-28 22:15:16 2570384 1204828
 # Include tables with the function "kable"
 
 knitr::kable(head(wildschwein_BE))
 ```
 
-<!-- the following is just a placeholder text, remove it!-->
-Revaluation evil aversion ultimate decrepit disgust decrepit eternal-return noble faithful pinnacle. Truth ascetic inexpedient decrepit free. Ubermensch free merciful mountains endless fearful decieve reason mountains will decrepit strong selfish depths. Overcome faith snare gains oneself transvaluation.
-
 ```{r}
 # include plots automatically
+ggplot(schreck_locations, aes(lat, lon)) +
+  geom_point(aes(color = id)) 
 
-ggplot(schreck_locations, aes(E, N)) +
-  geom_point() +
-  coord_map()
-
+ggplot(wildschwein_BE, aes(E,N))+
+  geom_point(aes(color=TierID))
 ```
-
-
-
-
 
 ## Material and Methods
 
 <!-- the following is just a placeholder text, remove it!-->
-Christianity revaluation value battle faithful marvelous society derive free truth. Right battle mountains superiority grandeur ascetic grandeur merciful. Derive against intentions burying salvation ocean. Right intentions dead victorious ideal spirit evil ultimate joy. Holiest spirit value oneself contradict aversion christianity ultimate convictions war christian.
+
+1) Clean data
+
+2) combine data to assign sexes to boar id.
+
+3) Assign scores to movement
+
+4) Compare scores of males and females.
 
 ## Results
 
 <!-- the following is just a placeholder text, remove it!-->
-Philosophy oneself passion play fearful self noble zarathustra deceptions sexuality. Endless ocean of oneself dead ocean. Selfish decrepit.
+
+Philosophy oneself passion play fearful self noble zarathustra
+deceptions sexuality. Endless ocean of oneself dead ocean. Selfish
+decrepit.
 
 ## Discussion
 
 <!-- the following is just a placeholder text, remove it!-->
-Justice convictions spirit sexuality insofar free marvelous joy. Revaluation virtues mountains spirit fearful sexuality love endless. Society intentions will noble burying aversion moral. Insofar passion ultimate mountains of play gains depths joy christian reason christianity mountains dead. Mountains christianity play war holiest ascetic passion oneself derive grandeur. Against pinnacle hope joy burying ocean of horror disgust victorious faithful justice suicide.
 
+Justice convictions spirit sexuality insofar free marvelous joy.
+Revaluation virtues mountains spirit fearful sexuality love endless.
+Society intentions will noble burying aversion moral. Insofar passion
+ultimate mountains of play gains depths joy christian reason
+christianity mountains dead. Mountains christianity play war holiest
+ascetic passion oneself derive grandeur. Against pinnacle hope joy
+burying ocean of horror disgust victorious faithful justice suicide.
