@@ -6,30 +6,53 @@ Analysis Geo 880**
 | Semester:      | FS22                              |
 |----------------|---------------------------------- |
 | **Data:**      | Wild Boar Movement Data           |
-| **Title:**     | The title of your project         |
-| **Student 1:** | Name of Student 1                 |
-| **Student 2:** | Name of Student 2                 |
+| **Title:**     | Sex differences in boar movement  |
+| **Student 1:** | He Yelu                           |
+| **Student 2:** | Lizzy Nickell                     |
 
 ## Abstract 
-<!-- (50-60 words) -->
+Wild boars show a distinct physical sexual dimorphism, with males being much larger than the females. Can this difference be seen in other aspects of wild boars? We analyzed the movement patterns of XX boars, X male and X females to compare the amount of movement in the sexes. We predicted that females move less than males, as they must care for the young, and are not responsible for maintaining territory.
 
 ## Research Questions
-<!-- (50-60 words) -->
+Is there a difference in how much males move vs. females?
 
 ## Results / products
-<!-- What do you expect, anticipate? -->
+We expect that males will move more than females, protecting territory while the females care for the young.
 
 ## Data
-<!-- What data will you use? Will you require additional context data? Where do you get this data from? Do you already have all the data? -->
+Provided data, combining the individual data with the sex id from the schreck data.
 
 ## Analytical concepts
-<!-- Which analytical concepts will you use? What conceptual movement spaces and respective modelling approaches of trajectories will you be using? What additional spatial analysis methods will you be using? -->
+3.1 Data pre-processing
+-   Data cleaning.
+-   Data combination to assign sexes to boar id.
+-   Assigning scores to movement.
+
+3.2 Data analysis
+-   Comparing scores of males and females.
+-   Time series analysis of movement pattern.
+-   Circannual movement pattern analysis among genders.
+-   Circadian movement pattern analysis among genders.
+-   Modelling between environmental factors and movement pattern.
+
+3.3 Visualization
+
 
 ## R concepts
-<!-- Which R concepts, functions, packages will you mainly use. What additional spatial analysis methods will you be using? -->
+library(ggplot)
+library(tidyverse)
+library(tmap)
+library(readr)       
+library(dplyr)       
+library(ggplot2)     
+library(sf)           
+library(terra)        
+library(lubridate) 
+library(zoo)
+library(similaritymeasures)
 
 ## Risk analysis
-<!-- What could be the biggest challenges/problems you might face? What is your plan B? -->
+Always a risk of data loss and computer crashes. Data and files will be backed up on github and on two computers.
 
 ## Questions? 
 <!-- Which questions would you like to discuss at the coaching session? -->
