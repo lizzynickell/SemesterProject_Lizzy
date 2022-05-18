@@ -7,7 +7,7 @@ Analysis Geo 880**
 |----------------|---------------------------------- |
 | **Data:**      | Wild Boar Movement Data           |
 | **Title:**     | Sex differences in boar movement  |
-| **Student 1:** | He Yelu                           |
+| **Student 1:** | Yelu He                           |
 | **Student 2:** | Lizzy Nickell                     |
 
 ## Abstract 
