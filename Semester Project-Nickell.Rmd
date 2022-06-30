@@ -26,23 +26,17 @@ There are many physical and behavioral differences between male and female wild 
 
 ## Introduction
 
-```{}
-```
+    The wild boar (Sus scrofa) is a highly adaptable species native to Europe and Asia and introduced to North America. They are highly invasive in North America, and considered pests in most of Europe and Asia. As such, numerous projects have been put in place to track the movements of wild boar and monitor efforts to repel them from croplands. 
 
-```{r}
-# include plots automatically
+    Wild boars are a dimorphic species. Males are 20% larger than females, and are solitary for the majority of the year (Wickline, 2014). Females travel in herds anywhere from 6 to 100 individuals with piglets, juveniles, and males up to 2 years old (Wickline, 2014). Females protect offspring, sometimes leaving piglets with a single female while others go off to forage. It has been estimated that homeranges for females are 500-1,000 ha, while males have a homerange of 1,000-2,000 ha (Kueling and Leus, 2019). 
 
-ggplot(schreck_locations, aes(E, N)) +
-  geom_point() +
-  coord_map()
-
-```
+    Nineteen wild boar were tagged and monitored between the years of 2014 and 2016. Six of the boars were adult males, and the rest were adult females. Two main site locations were determeined by looking at the center of the the pig's locations: Bern and Aargau. Some of the pigs were captured multiple times and given new collars, but their ID was kept the same. Depending on the pig, and time of year, locations were taken at different sampling ratios. Pigs with enough data were used for this analysis. 
 
 ## Material and Methods
 
-<!-- the following is just a placeholder text, remove it!-->
+Nineteen wild boar were tagged and monitored between the years of 2014 and 2016. Six of the boars were adult males, and the rest were adult females. Two main site locations were determeined by looking at the center of the the pig's locations: Bern and Aargau. Some of the pigs were captured multiple times and given new collars, but their ID was kept the same. Depending on the pig, and time of year, locations were taken at different sampling ratios. Pigs with enough data were used for this analysis.
 
-Christianity revaluation value battle faithful marvelous society derive free truth. Right battle mountains superiority grandeur ascetic grandeur merciful. Derive against intentions burying salvation ocean. Right intentions dead victorious ideal spirit evil ultimate joy. Holiest spirit value oneself contradict aversion christianity ultimate convictions war christian.
+Two methods were used to analyze the motion of the pigs and compare them by sex. The first was a traditional bounding box method, taking the extreme coordinates in each direction and creating a box.
 
 ## Results
 
