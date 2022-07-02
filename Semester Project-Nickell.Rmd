@@ -292,7 +292,7 @@ tmap_arrange(map1, map2, map5, map10, map11, map16, map18, map22, map25, map31, 
 
 ```
 
-*Figure 4: Resulting Polygons for each pig overlaid on a map of Switzerland.* \<span style="color: #00cef6;"\>Blue \</span\> *indicates male pigs,* \<span style="color: #aff000;"\>Green \</span\> *indicates female pigs.*
+*Figure 4: Resulting Polygons for each pig overlaid on a map of Switzerland.* *Blue* *indicates male pigs,* *Green* *indicates female pigs.*
 
 ## Discussion
 
