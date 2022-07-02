@@ -5,7 +5,7 @@ author: Lizzy Nickell
 output: html_document
 ---
 
-```{r, echo = FALSE, warning=FALSE, message=FALSE}
+```{r Chunk 0, message=FALSE, warning=FALSE, include=FALSE}
 #Housekeeping:
 
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
@@ -32,7 +32,7 @@ Wild boars are a dimorphic species. Males are 20% larger than females, and are s
 
 Nineteen wild boar were tagged and monitored between the years of 2014 and 2016. Six of the boars were adult males, and the rest were adult females. Two main site locations were determeined by looking at the center of the the pig's locations: Bern and Aargau. Some of the pigs were captured multiple times and given new collars, but their ID was kept the same. Depending on the pig, and time of year, locations were taken at different sampling ratios. Pigs with enough data were used for this analysis.
 
-```{r}
+```{r Chunk 1, include=FALSE}
 #load data
 pigs <- wildschwein_BE
 metapigs <- wildschwein_metadata
@@ -52,10 +52,6 @@ pigs2 <- st_as_sf(pigs2,
 
 pigs2grouped <- group_by(pigs2,TierID)
 pigs2smry <- summarise(pigs2grouped)
-
-mcp <- st_convex_hull(pigs2smry)
-
-
 ```
 
 ## Material and Methods
@@ -64,7 +60,7 @@ Nineteen wild boar were tagged and monitored between the years of 2014 and 2016.
 
 Two methods were used to analyze the motion of the pigs and compare them by sex. The first was a traditional bounding box method, taking the extreme coordinates in each direction and creating a box from those coordinates (fig 1). The area of each box was calculated, then the averages for each sex were calculated.
 
-```{r}
+```{r Chunk 2}
   #Isolate piggies
 pig1 <- mcp %>% filter(TierID == 1)
 pig2 <- mcp %>% filter(TierID == 2)
@@ -150,9 +146,9 @@ group_by(pigs3, Sex) %>%
 
 [![Figure 1: Example of a bounding box created from an example set of data. Image from L3Harris Geospatial Solutions, Inc.](images/paste-BA010BFB.png)](https://www.l3harrisgeospatial.com/Learn/Blogs/Blog-Details/ArtMID/10198/ArticleID/15223/Minimum-Area-Bounding-Box)
 
-The second method was an adaptation of the bounding box. The furthest coordinates in each direction were identified and a polygon was created connecting those four points (fig 2).
+The second method was an adaptation of the bounding box (chunk 4). The furthest coordinates in each direction were identified and a polygon was created connecting those four points (fig 2). The area was calculated for each pig, and, as with the bounding boxes, the areas were averaged for each sex.
 
-```{r}
+```{r Chunk 3, echo=FALSE}
 pig1.1 <- pigs %>% filter(TierID == 1)
 pig2.1 <- pigs2 %>% filter(TierID == 1)
 
@@ -161,14 +157,80 @@ ggplot() +
   geom_point(data=pig1.1, mapping=aes(x=E, y=N))
 ```
 
+*Figure 2: Ueli's (ID 1) location over the study period, and the resulting polygon created from the for extreme points.*
+
+```{r Chunk 4: Min-Max Polygons}
+pigs2 <- read.csv("~/Documents/cma_project/SemesterProject_Lizzy/pigs2.csv")
+
+  #Make data sf
+pigs2 <- st_as_sf(pigs2, 
+                          coords = c("E", "N"), 
+                          crs = 2056,
+                          remove = FALSE)
+
+pigs2grouped <- group_by(pigs2,TierID)
+pigs2smry <- summarise(pigs2grouped)
+
+polypigs2 <- pigs2smry %>% 
+  st_cast("POLYGON")
+  
+areapigs2 <-  polypigs2 %>%
+  mutate(area = st_area(geometry))
+areapigs2
+
+write.csv(areapigs2, file = "pigareas.csv")
+
+pigareas <- read.csv("~/Documents/cma_project/SemesterProject_Lizzy/pigareas.csv")
+
+describeBy(pigareas, group = "Sex")
+group_by(pigareas, Sex) %>%
+  summarise(
+    count = n(),
+    mean = mean(area, na.rm = TRUE),
+    sd = sd(area, na.rm = TRUE)
+  )
+
+ggboxplot(pigareas, x = "Sex", y = "area", 
+          color = "Sex", palette = c("#aff000", "#00cef6"),
+          ylab = "Area", xlab = "Sex")
+
+with(pigareas, shapiro.test(area[Sex == "m"]))
+with(pigareas, shapiro.test(area[Sex == "f"]))
+  #not normal
+
+wilcox.test(area ~ Sex, data = pigareas,
+            exact = FALSE)
+```
+
 ## Results
 
-<!-- the following is just a placeholder text, remove it!-->
+```{r Chunk 5, echo=FALSE}
+#bounding box method
+ggboxplot(pigs3, x = "Sex", y = "box_areas", 
+          color = "Sex", palette = c("#aff000", "#00cef6"),
+          ylab = "Bounding Box Area", xlab = "Sex")
+#Min-max Polygons 
+ggboxplot(pigs3, x = "Sex", y = "area", 
+          color = "Sex", palette = c("#aff000", "#00cef6"),
+          ylab = "Area", xlab = "Sex")
+```
 
-Philosophy oneself passion play fearful self noble zarathustra deceptions sexuality. Endless ocean of oneself dead ocean. Selfish decrepit.
+Neither method showed statistical differences between the sexes. Using the bounding box, the the average calculated area for males was around 2,734ha while females had an average of 945ha. Using the max-min polygon method, the average calculated area for males was around 588ha, while females had an average of 133ha. These numbers hint at a difference. However, the box plots (fig 3) and the standard deviations (chunk 6) show that the amount of variation negates any possible differences.
+
+```{r Chunk 6}
+#Bounding Box Method
+group_by(pigs3, Sex) %>%
+  summarise(
+    count = n(),
+    mean = mean(box_areas, na.rm = TRUE),
+    sd = sd(box_areas, na.rm = TRUE))
+
+#Min-Max Polygon Method
+group_by(pigs3, Sex) %>%
+  summarise(
+    count = n(),
+    mean = mean(area, na.rm = TRUE),
+    sd = sd(area, na.rm = TRUE))
+```
 
 ## Discussion
-
-<!-- the following is just a placeholder text, remove it!-->
-
-Justice convictions spirit sexuality insofar free marvelous joy. Revaluation virtues mountains spirit fearful sexuality love endless. Society intentions will noble burying aversion moral. Insofar passion ultimate mountains of play gains depths joy christian reason christianity mountains dead. Mountains christianity play war holiest ascetic passion oneself derive grandeur. Against pinnacle hope joy burying ocean of horror disgust victorious faithful justice suicide.
