@@ -2,7 +2,9 @@
 title: "Semester Project Review"
 author: "Lizzy Nickell"
 date: '2022-09-08'
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ---
@@ -12,7 +14,7 @@ author: Lizzy Nickell
 output: html_document
 ---
 
-```{r Chunk 0, message=FALSE, warning=FALSE, include=FALSE}
+```{r Chunk 1, message=FALSE, warning=FALSE, include=FALSE}
 #Housekeeping:
 
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
@@ -25,40 +27,57 @@ library(psych)
 library(ggpubr)
 library(dplyr)
 library(tmap)
+
 ```
 
 ## Abstract
 
-There are many physical and behavioral differences between male and female wild boars. Females are typically smaller, and stay together in herds with other females and young. Males, on the other hand, wander larger territories, avoiding other males, and only interacting with females during mating season. We wanted to know if this difference in behavior is noticeable in their movement patterns. Using current data and multiple methods, we have found no differences in the movement patterns. While they may act differently, one sex does not move more than the other.
+There are many physical and behavioral differences between male and female wild boars. Females are typically smaller, and stay together in herds with other females and young. Males, on the other hand, wander larger territories, avoiding other males, and only interacting with females during mating season. These behavioral patterns can lead to the development of different deterrence methods. Using current data and multiple methods, there is some evidence that the sample population follows expected patterns. This evidence can be used to create sex-specific detterence methods.
 
 ## Introduction
 
-The wild boar (Sus scrofa) is a highly adaptable species native to Europe and Asia and introduced to North America. They are highly invasive in North America, and considered pests in most of Europe and Asia. As such, numerous projects have been put in place to track the movements of wild boar and monitor efforts to repel them from croplands.
+The wild boar (Sus scrofa) is a highly adaptable species native to Europe and Asia and has been introduced to North America. They are highly invasive in North America, and considered pests in most of Europe and Asia, causing damage to crops and automobile damage due to vehicle impacts. As such, numerous projects have been put in place to track the movements of wild boar and monitor efforts to repel them from croplands and roads.
 
-Wild boars are a dimorphic species. Males are 20% larger than females, and are solitary for the majority of the year (Wickline, 2014). Females travel in herds anywhere from 6 to 100 individuals with piglets, juveniles, and males up to 2 years old (Wickline, 2014). Females protect offspring, sometimes leaving piglets with a single female while others go off to forage. It has been estimated that homeranges for females are 500-1,000 ha, while males have a home range of 1,000-2,000 ha (Kueling and Leus, 2019).
+Wild boars are a dimorphic species. Males are 20% larger than females, weighing between 75 and 100kg, and 75-80cm at shoulder height (Marsan and Mattioli, 2013). Males are solitary for the majority of the year, seeking out females only during breeding season (Wickline, 2014). females are smaller, weighing between 60 and 80kg, and only 63-65cm at shoulder height (Marsan and Mattioli, 2013). Females travel in herds anywhere from 6 to 100 individuals with piglets, juveniles, and males up to 2 years old (Wickline, 2014). Females protect offspring, sometimes leaving piglets with a single female while others go off to forage. Because of this difference in behavior, the typical home range also varies by sex. It has been estimated that home ranges for females are 500-1,000 ha, while males have a home range of 1,000-2,000 ha (Kueling and Leus, 2019).
 
-Nineteen wild boar were tagged and monitored between the years of 2014 and 2016. Six of the boars were adult males, and the rest were adult females. Two main site locations were determeined by looking at the center of the the pig's locations: Bern and Aargau. Some of the pigs were captured multiple times and given new collars, but their ID was kept the same. Depending on the pig, and time of year, locations were taken at different sampling ratios. Pigs with enough data were used for this analysis.
+One project enacted to monitor wild boar movement was conducted by WILMA and ZHAW in 2014 to 2016. Nineteen wild boar were tagged and monitored, with an effort to tag as many different herds as possible (Suter, 2013). Six of the boars were adult males, and the rest were adult females. Two main site locations were determined by looking at the center of the the boar's locations: Bern and Aargau. Some of the boars were captured multiple times and given new collars, but their ID was kept the same. Depending on the boar, and time of year, locations were taken at different sampling ratios. Boars with enough data were used for this analysis.
 
-```{r Chunk 1, include=FALSE}
+Analyzing the differences in movement based on sex is an important step for evaluating deterrence methods, as different movement patterns could be more reactive to different methods. It is expected that males will have larger areas, but travel alone, so wider-spread deterrence methods, like acoustic-scare devices, would be more effective. Females likely travel in large herds, but smaller areas, implying that a more concentrated deterrence, like electric fences, would be more effective. Confirming that the boars in the study follow the expected pattern is the first step in establishing effective deterrence strategies.
+
+```{r Chunk 2, include=FALSE}
 #load data
 pigs <- wildschwein_BE
 metapigs <- wildschwein_metadata
 
+#add sex to base data
 sexypigs <- read.csv("~/Documents/cma_project/SemesterProject_Lizzy/sexypigs.csv")
 
+sexypigs <- st_as_sf(sexypigs, coords = c("E", "N"), 
+                          crs = 2056,
+                          remove = FALSE)
+
+sexypig1 <- filter(sexypigs, TierID == "1")
+
+tmap_mode("view")
+
+map0 <- tm_shape(sexypig1) +
+  tm_dots(col = "green")
+map0
 ```
 
 ## Material and Methods
 
-Nineteen wild boar were tagged and monitored between the years of 2014 and 2016. Six of the boars were adult males, and the rest were adult females. Two main site locations were determined by looking at the center of the the pig's locations: Bern and Aargau. Some of the pigs were captured multiple times and given new collars, but their ID was kept the same. Depending on the pig, and time of year, locations were taken at different sampling ratios. Pigs with enough data were used for this analysis.
+Nineteen wild boar were tagged and monitored between the years of 2014 and 2016. Six of the boars were adult males, and thirteen were adult females. There were two main sites that the boars were found in: Bern and Aargau. Locations were determined by looking at the center of the the boar's locations. Depending on the boar, and time of year, locations were taken at different sampling ratios. Over the time period, enough location points were collected to get an idea of the area covered by each boar. The data was compiled into an R package and into two data frames, the main data, and a meta data set. The data was then converted from a standard data frame to a sf object.
 
-Three methods were used to analyze the motion of the pigs and compare them by sex. The first was a convex hull calculation, calculating the area of land covered by the wild boars.
+Three methods were used to analyze the motion of the pigs and compare them by sex. The first was a convex hull calculation, calculating the total area of land covered by the wild boars. A convex hull is the smallest possible polygon that can be created containing all of the points of interest. Figure 1 shows the convex hull overlaying the location points of boar number 1, Ueli.
 
-```{r Chunk 2, echo=FALSE}
+First, the data was filtered by sex, and using the sf package, the filtered data was grouped, summarized, and converted into a convex hull. The area of each polygon was then calculated. The two groups were recombined, and statistical tests were run to compare the areas by sex. Shapiro tests showed that the data was not normal, so a wilcox test was run to test significance.
+
+```{r include=FALSE}
 #convex hull
-sexypigs <- st_as_sf(sexypigs, coords = c("E", "N"), 
-                          crs = 2056,
-                          remove = FALSE)
+
+devtools::install_github("tidyverse/dplyr")
+
 
 malepigs <- filter(sexypigs, sex == "m")
 femalepigs <- filter(sexypigs, sex == "f")
@@ -66,28 +85,37 @@ femalepigs <- filter(sexypigs, sex == "f")
 mpigsgrouped <- group_by(malepigs,TierID)
 mpigssmry <- summarise(mpigsgrouped)
 polymales <- st_convex_hull(mpigssmry)
-mareas <- st_area(polymales)
+mareas <- polymales %>% 
+  mutate(area = st_area(polymales))
 
 fpigsgrouped <- group_by(femalepigs,TierID)
 fpigssmry <- summarise(fpigsgrouped)
 polyfemales <- st_convex_hull(fpigssmry)
-fareas <- st_area(polyfemales)
+fareas <- polyfemales %>%
+  mutate(area = st_area(polyfemales))
 
-convexpigs <- read.csv("~/Documents/cma_project/SemesterProject_Lizzy/areapigs.csv")
+convexpigs <- read.csv("~/Documents/cma_project/SemesterProject_Lizzy/convexpigs.csv")
 
 group_by(convexpigs, Sex) %>%
   summarise(
     count = n(),
-    mean = mean(Area, na.rm = TRUE),
-    sd = sd(Area, na.rm = TRUE))
-wilcox.test(Area ~ Sex, data = convexpigs,
-            exact = FALSE)
+    mean = mean(ConvexArea, na.rm = TRUE),
+    sd = sd(ConvexArea, na.rm = TRUE))
 
+with(convexpigs, shapiro.test(ConvexArea[Sex == "m"]))
+with(convexpigs, shapiro.test(ConvexArea[Sex == "f"]))
+#not normal
+wilcox.test(ConvexArea ~ Sex, data = convexpigs,
+            exact = FALSE)
+#significant
+```
+
+```{r echo=FALSE}
 pig01 <- polymales%>% filter(TierID == 1)
 
-tmap_mode("view")
-
-map1 <- tm_shape(pig01) +
+map1 <- tm_shape(sexypig1) +
+  tm_dots(col = "green") + 
+  tm_shape(pig01) +
   tm_polygons(col = "#00cef6",alpha = 0.4,border.col = "#00cef6")
 
 map1
@@ -95,12 +123,14 @@ map1
 
 *Figure 1: Convex Hull of wild boar 1, "Ueli."*
 
-The second method was a traditional bounding box method, taking the extreme coordinates in each direction and creating a box from those coordinates (fig 2). The area of each box was calculated, then the averages for each sex were calculated.
+The second method was a traditional bounding box method, taking the extreme coordinates in each direction and creating a box from those coordinates. Figure 2 shows the resulting bounding box from boar one's data overlaying the convex hulls and location data. Each line of the box is the created taking the furthest points and creating lines parallel to longitude and latitude. The area of each box was calculated, then the averages for each sex were calculated. Like the convex hull averages, the data was not normal, and a wilcox test was run to test significance.
 
-```{r Chunk 3, include=FALSE}
+```{r include=FALSE}
 #Bounding Boxes
 mcp <- sexypigs
- 
+mcp <- st_as_sf(mcp, coords = c("E", "N"), 
+                          crs = 2056,
+                          remove = FALSE)
 #Isolate piggies
 pig1 <- mcp %>% filter(TierID == 1)
 pig2 <- mcp %>% filter(TierID == 2)
@@ -183,9 +213,18 @@ group_by(boxypigs1, Sex) %>%
     mean = mean(areas, na.rm = TRUE),
     sd = sd(areas, na.rm = TRUE)
   )
+
+with(boxypigs1, shapiro.test(BoxArea[Sex == "m"]))
+with(boxypigs1, shapiro.test(BoxArea[Sex == "f"]))
+#not normal
+wilcox.test(BoxArea ~ Sex, data = boxypigs1,
+            exact = FALSE)
+
+#not significant
 ```
 
-```{r, echo = FALSE}
+```{r echo=FALSE}
+
 #Pig1 example
 pig1 <- mcp %>% filter(TierID == 1)
   
@@ -195,11 +234,9 @@ box1 <- st_as_sf(box1, coords = c("E", "N"),
                           crs = 2056,
                           remove = FALSE)
 
-Pig1Plot <- ggplot() + 
-  geom_sf(data = pig1, aes())+
-  geom_sf(data = box1, aes(alpha=0))
-
-map2 <- tm_shape(pig01) +
+map2 <- tm_shape(sexypig1) +
+  tm_dots(col = "green") +
+  tm_shape(pig01) +
   tm_polygons(col = "#00cef6",alpha = 0.4,border.col = "#00cef6") +
   tm_shape(box1)+
   tm_polygons(alpha = 0,border.col = "Black")
@@ -208,9 +245,9 @@ map2
 
 *Figure 2: Example of a bounding box created from wild boar number 1 overlaid with the convex polygon created.*
 
-The third method was an adaptation of the bounding box (chunk 4). The furthest coordinates in each direction were identified and a polygon was created connecting those four points (fig 2). The area was calculated for each pig, and, as with the bounding boxes, the areas were averaged for each sex.
+The third method was an adaptation of the bounding box. The furthest coordinates in each direction were identified and a polygon was created connecting those four points, rather than the bounding box that created parallel lines (fig 3). The area was calculated for each pig, and the areas were averaged for each sex. A wilcox test was run to test for significant difference.
 
-```{r Chunk 3, echo=FALSE}
+```{r include=TRUE, echo=FALSE}
 #Min-max boxes
 
 #sort data: min/max E & N
@@ -230,7 +267,9 @@ mmpigs <- st_convex_hull(pigs2smry)
 
 pig1.1 <- mmpigs %>% filter(TierID == 1)
 
-map3 <- tm_shape(pig01) +
+map3 <- tm_shape(sexypig1) +
+  tm_dots(col = "green") +
+  tm_shape(pig01) +
   tm_polygons(col = "#00cef6",alpha = 0.4,border.col = "#00cef6") +
   tm_shape(box1)+
   tm_polygons(alpha = 0,border.col = "Black")+
@@ -242,147 +281,120 @@ map3
 
 *Figure 3: Min-max polygon created from wild boar 1's data (purple), overlaying the bounding box (black), and the convex polygon (blue).*
 
-```{r Chunk 4: Min-Max Polygons, include=FALSE}
+```{r Chunk 7: Min-Max Polygons, include=FALSE}
 
 polypigs2 <- pigs2smry %>% 
   st_cast("POLYGON")
   
-areapigs2 <-  polypigs2 %>%
+mmareapigs2 <-  polypigs2 %>%
   mutate(area = st_area(geometry))
-areapigs2
 
-write.csv(areapigs2, file = "pigareas.csv")
+write.csv(mmareapigs2, file = "pigareas.csv")
 
 #add sex
-pigareas <- read.csv("~/Documents/cma_project/SemesterProject_Lizzy/pigareas1.csv")
+mmpigs <- read.csv("~/Documents/cma_project/SemesterProject_Lizzy/mmpigs.csv")
 
-describeBy(pigareas, group = "Sex")
-group_by(pigareas, Sex) %>%
+group_by(mmpigs, Sex) %>%
   summarise(
     count = n(),
-    mean = mean(area, na.rm = TRUE),
-    sd = sd(area, na.rm = TRUE)
+    mean = mean(mmArea, na.rm = TRUE),
+    sd = sd(mmArea, na.rm = TRUE)
   )
 
-ggboxplot(pigareas, x = "Sex", y = "area", 
-          color = "Sex", palette = c("#aff000", "#00cef6"),
-          ylab = "Area", xlab = "Sex")
-
-with(pigareas, shapiro.test(area[Sex == "m"]))
-with(pigareas, shapiro.test(area[Sex == "f"]))
+with(mmpigs, shapiro.test(mmArea[Sex == "m"]))
+with(mmpigs, shapiro.test(mmArea[Sex == "f"]))
   #not normal
 
-wilcox.test(area ~ Sex, data = pigareas,
+wilcox.test(mmArea ~ Sex, data = mmpigs,
             exact = FALSE)
 
-#combine two files
-pigs3 <- read_csv("pigs3.csv")
 ```
 
 ## Results
 
-```{r Chunk 5, echo=FALSE}
-
-
-#bounding box method
-ggboxplot(pigs3, x = "Sex", y = "boundingareas", 
-          color = "Sex", palette = c("#aff000", "#00cef6"),
-          title = "A",
-          ylab = "Bounding Box Area", xlab = "Sex"
-          )
-#Min-max Polygons 
-ggboxplot(pigs3, x = "Sex", y = "area", 
-          color = "Sex", palette = c("#aff000", "#00cef6"),
-          title = "B",
-          ylab = "Area", xlab = "Sex")
-
-```
-
-*Figure 3: Box plots of the resulting areas from the Bounding Box Method (A) and the Max-Min Polygon Method (B).*
-
-Neither method showed statistical differences between the sexes. Using the bounding box, the the average calculated area for males was around 2,734ha while females had an average of 945ha. Using the max-min polygon method, the average calculated area for males was around 588ha, while females had an average of 133ha. These numbers hint at a difference. However, the box plots (fig 3) and the standard deviations (chunk 6) show that the amount of variation negates any possible differences.
-
-```{r Chunk 6, echo=FALSE}
-#Bounding Box Method
-group_by(pigs3, Sex) %>%
+```{r include=FALSE}
+conresults <- group_by(convexpigs, Sex) %>%
   summarise(
     count = n(),
-    mean = mean(boundingareas, na.rm = TRUE),
-    sd = sd(boundingareas, na.rm = TRUE))
+    mean = mean(ConvexArea, na.rm = TRUE),
+    sd = sd(ConvexArea, na.rm = TRUE))
 
-#Min-Max Polygon Method
-group_by(pigs3, Sex) %>%
+boxresults <- group_by(boxypigs1, Sex) %>%
   summarise(
     count = n(),
-    mean = mean(area, na.rm = TRUE),
-    sd = sd(area, na.rm = TRUE))
-```
+    mean = mean(BoxArea, na.rm = TRUE),
+    sd = sd(BoxArea, na.rm = TRUE))
 
-```{r Chunk 7, echo=FALSE}
-tmap_mode("view")
+mmresults <- group_by(mmpigs, Sex) %>%
+  summarise(
+    count = n(),
+    mean = mean(mmArea, na.rm = F),
+    sd = sd(mmArea, na.rm = F))
 
-map1 <- tm_shape(pig1) +
-  tm_polygons(col = "#00cef6",alpha = 0.4,border.col = "#00cef6")
-map25 <- tm_shape(pig25) +
-  tm_polygons(col = "#00cef6",alpha = 0.4,border.col = "#00cef6") 
-map31 <- tm_shape(pig31) +
-  tm_polygons(col = "#00cef6",alpha = 0.4,border.col = "#00cef6") 
-map40 <- tm_shape(pig40) +
-  tm_polygons(col = "#00cef6",alpha = 0.4,border.col = "#00cef6") 
-map48 <- tm_shape(pig48) +
-  tm_polygons(col = "#00cef6",alpha = 0.4,border.col = "#00cef6") 
-map97 <- tm_shape(pig97) +
-  tm_polygons(col = "#00cef6",alpha = 0.4,border.col = "#00cef6") 
+wilcox.test(ConvexArea ~ Sex, data = convexpigs,
+            exact = FALSE)
+wilcox.test(BoxArea ~ Sex, data = boxypigs1,
+            exact = FALSE)
+wilcox.test(mmArea ~ Sex, data = mmpigs,
+            exact = FALSE)
 
-map2 <- tm_shape(pig2) +
-  tm_polygons(col = "#aff000",alpha = 0.4,border.col = "#aff000") 
-map5 <- tm_shape(pig5) +
-  tm_polygons(col = "#aff000",alpha = 0.4,border.col = "#aff000")
-map10 <- tm_shape(pig10) +
-  tm_polygons(col = "#aff000",alpha = 0.4,border.col = "#aff000")
-map11 <- tm_shape(pig11) +
-  tm_polygons(col = "#aff000",alpha = 0.4,border.col = "#aff000")
-map16 <- tm_shape(pig16) +
-  tm_polygons(col = "#aff000",alpha = 0.4,border.col = "#aff000")
-map18 <- tm_shape(pig18) +
-  tm_polygons(col = "#aff000",alpha = 0.4,border.col = "#aff000")
-map22 <- tm_shape(pig22) +
-  tm_polygons(col = "#aff000",alpha = 0.4,border.col = "#aff000")
-map36 <- tm_shape(pig36) +
-  tm_polygons(col = "#aff000",alpha = 0.4,border.col = "#aff000")
-map60 <- tm_shape(pig60) +
-  tm_polygons(col = "#aff000",alpha = 0.4,border.col = "#aff000")
-map83 <- tm_shape(pig83) +
-  tm_polygons(col = "#aff000",alpha = 0.4,border.col = "#aff000")
-map84 <- tm_shape(pig84) +
-  tm_polygons(col = "#aff000",alpha = 0.4,border.col = "#aff000")
-map86 <- tm_shape(pig86) +
-  tm_polygons(col = "#aff000",alpha = 0.4,border.col = "#aff000")
-map98 <- tm_shape(pig98) +
-  tm_polygons(col = "#aff000",alpha = 0.4,border.col = "#aff000")
-
-tmap_arrange(map1, map2, map5, map10, map11, map16, map18, map22, map25, map31, map36, map40, map48, map60, map83, map84, map86, map97, map98)
+conresults
+boxresults
+mmresults
 
 ```
 
-*Figure 4: Resulting Polygons for each pig overlaid on a map of Switzerland.* *Blue* *indicates male pigs,* *Green* *indicates female pigs.*
+```{r include=FALSE}
+#figure 3
+allboars <- print(list(convexpigs, boxypigs1, mmpigs)) %>% reduce(full_join, by = "TierID")
+write_csv(allboars, file = "allboars.csv")
+
+allboars <- read.csv("~/Documents/cma_project/SemesterProject_Lizzy/allboars2.csv")
+```
+
+```{r echo=FALSE}
+boxplot<- ggplot(allboars, aes(x=Sex, y=Area, fill=Sex)) + 
+  geom_boxplot()+
+  facet_wrap(~Method)+
+  labs(y= "Area (m^2)")
+boxplot
+```
+
+*Figure 4: Box plots of the resulting areas from the Convex Hull (A), Bounding Box Method (B) and the Max-Min Polygon Method (C).*
+
+Every method returned the expected results of males covering larger areas than females. The convex hull method had slightly significantly different averages (p=0.048), with males having an average range of 1713ha, and females having an average range of 557ha. Neither the bounding box method nor the min-max method were significantly different (0.12 and 0.21, respectively). As seen in figure 4, the bounding box method calculated larger areas than the convex method while the min-max method calculated smaller areas than the convex method. The ratio of female to male, however, were all similar, ranging from 0.26 to 0.33.
 
 ## Discussion
 
-It was expected that there would be a difference between the sexes in the amount of land covered. However, the data analysis shows that there is no statistical differences. There could be several reasons for this discrepancy.
+The convex hull calculations resulted in the the most significant results of the three different methods. As the most traditional and direct method, the convex hull is definitely method that best represents the area covered by individual boars. Through this method, it can be confirmed that the male boars in this study do cover more area than the the female boars. The next steps would be to test different densities of deterrence devices in areas that the different sexes frequent. Areas that are more commonly covered by males theoretically need less devices, or different devices, like acoustic vs electric, and further testing can prove that.
 
-The first possible explanation is the existence of physical constraints on these pigs. When these polygons are laid over a land use map (fig 4 and 5), there is a potential pattern showing that these pigs are staying in areas with tree covers. Looking further at these maps, there is a barrier of cropland and built-up land cover separating the main tree cover areas and neighboring tree covers. The possibility of physical constraints is further strengthened by the reported territory sizes of the wild boars: females averaging 750ha, while males average 1,500ha (Kueling and Leus, 2019). These values are much higher than the averages produced in the min-max polygon method, a method that more closely aligns to the true area covered.
+The convex hull calculations can be computationally taxing. To reduce the amount of calculations, the best established method is the bounding box method. As already mentioned, the bounding box methods result in higher areas than the convex hull method, and artificially inflate the results. Additionally the bounding box method loses any shape details. Looking again at figure 3, there are areas of land that that are covered by the bounding box that boar 1 has never visited. If the bounding boxes were used to determine placement of deterrence devices, those devices could be completely useless. Comparatively, this new min-max method underestimates the area covered, but ensures that all of the areas covered are actually areas visited by wild boar herds. A researcher can be assured that deterrence devices placed within this polygon will have a high chance of interacting with a boar.
 
-![Figure 5: Largest Polygon (pig 48) overlaying map of land use from Esri and the ESA.](images/Background.png){width="425"}
-
-![Figure 6: Smallest Polygon (pig 83) over land use map from Esri and the ESA.](images/Background2.png){width="425"}
-
-A second explanation could be that neither of these methods are suitable for estimating movement and home ranges. It should be noted that the min-max polygon was a method invented by the author and not authenticated by any other researchers. However, the bounding-box method is an established method, and though not an estimation of actual home ranges, it does produce consistent results for comparison.
-
-A third explanation, and possibly the most likely, is the sample size. With only 6 males and 13 females, there are not enough data points to draw any strong conclusions. Looking back on the box plots, there are several outliers in both sexes. To better analyze the effectiveness of these methods, more pigs need to be added to the data set. It's possible that pig 83 was the female responsible for caring for the the herds young, and thus didn't move much. Pig 48 could have been swept up the lake and had to walk back, dramatically expanding its range, or the collar could have fallen off and been carried away. When more data points are added, weird occurrences like pigs 83 and 48 will have less influence on the overall patterns. Including more pigs from other areas around Europe will also remove the possible effect physical constraints could have had on the pigs. Pigs in Munich aren't be affected by Lac de Neuchatel, just as pigs in Bern aren't affected by the Isar.
+It should be pointed out that the number of boars sampled in this study is very small. Small sample size reduces the power of these tests, and the results of the study, while confirming, may still have errors, and if more decisions are made based on this limited data, they could be the wrong decisions to make. When and if more data is collected, a less taxing computation will be useful. When comparing the bounding box and the min-max method, the min-max method will lead to more effective suggestions when it comes to where deterrence devices should be placed.
 
 ## References
 
+Keuling, O., & Leus, K. (2019). Sus scrofa (Wild Boar). Retrieved June 30, 2022, from <https://www.iucnredlist.org/species/41775/44141833#habitat-ecology>
+
+Marsan, Andrea., & Mattioli, Stefano. (2013). Il cinghiale.ISBN 978-88-96348-178.
+
+Suter, S. (2013). Prevention of wild boar damage in agriculture. In WILMA/ZHAW.
+
 Wickline, K. (2014). Sus scrofa. Retrieved June 3, 2022, from <https://animaldiversity.org/site/accounts/information/Sus_scrofa.html#880B0B11-4354-11E3-8D47-002500F14F28>
 
-Keuling, O., & Leus, K. (2019). Sus scrofa (Wild Boar). Retrieved June 30, 2022, from <https://www.iucnredlist.org/species/41775/44141833#habitat-ecology>
+## Appendix A
+
+Convex Hull Polygons of all Boars
+
+```{r}
+
+sexypigsgrouped <- group_by(sexypigs,TierID)
+sexypigssmry <- summarise(sexypigsgrouped)
+sexypoly <- st_convex_hull(sexypigssmry)
+
+tmap_mode("view")
+
+tm_shape(sexypoly) +
+  tm_polygons(col = "#00cef6",alpha = 0.4,border.col = "#00cef6")+
+  tm_facets(by= "TierID")
+```
